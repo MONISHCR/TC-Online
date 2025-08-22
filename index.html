@@ -2,14 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>'>
   <title>Transfer Certificate Generator</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#667eea">
   <style>
     :root {
       --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -52,7 +53,7 @@
       z-index: 2;
       max-width: 700px;
       margin: 0 auto;
-      padding: 2rem 1rem;
+      padding: 2rem 1rem 6rem; /* bottom space for floating action button on mobile */
     }
 
     .main-card {
@@ -162,6 +163,8 @@
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .generate-btn::before {
@@ -190,9 +193,9 @@
 
     .floating-btn {
       position: fixed;
-      bottom: 2rem;
-      left: 1rem;
-      right: 1rem;
+      bottom: calc(1rem + env(safe-area-inset-bottom));
+      left: calc(1rem + env(safe-area-inset-left));
+      right: calc(1rem + env(safe-area-inset-right));
       z-index: 1000;
       background: var(--primary-gradient);
       border: none;
@@ -203,6 +206,8 @@
       color: white;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
       backdrop-filter: blur(10px);
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .copyright {
@@ -275,8 +280,13 @@
         font-size: 2rem;
       }
       
+      .form-control, .form-select {
+        font-size: 1rem; /* >=16px to prevent iOS zoom */
+        padding: 0.9rem 1rem;
+      }
+      
       .copyright {
-        bottom: 6rem;
+        bottom: calc(6rem + env(safe-area-inset-bottom));
         right: 1rem;
         font-size: 0.8rem;
       }
@@ -297,49 +307,49 @@
         <p>Generate your official transfer certificate instantly</p>
       </div>
 
-      <form id="tcForm">
+      <form id="tcForm" novalidate>
         <div class="form-floating">
-          <input type="date" class="form-control" id="date" name="date" placeholder="Date" required>
+          <input type="date" class="form-control" id="date" name="date" placeholder="Date" required autocomplete="off" inputmode="numeric">
           <label for="date"><i class="fas fa-calendar-alt me-2"></i>Date</label>
         </div>
 
         <div class="form-floating">
-          <input type="text" class="form-control" id="college_period" name="college_period" placeholder="2021-2025" required>
+          <input type="text" class="form-control" id="college_period" name="college_period" placeholder="2021-2025" required autocomplete="off" inputmode="text">
           <label for="college_period"><i class="fas fa-clock me-2"></i>College Period (EG:2021-2025) </label>
         </div>
 
         <div class="form-floating">
-          <input type="text" class="form-control" id="student_name" name="student_name" placeholder="Student Name" required>
+          <input type="text" class="form-control" id="student_name" name="student_name" placeholder="Student Name" required autocomplete="name" autocapitalize="words">
           <label for="student_name"><i class="fas fa-user me-2"></i>Student Name</label>
         </div>
 
         <div class="form-floating">
-          <input type="text" class="form-control" id="parent_name" name="parent_name" placeholder="Parent's Name" required>
+          <input type="text" class="form-control" id="parent_name" name="parent_name" placeholder="Parent's Name" required autocomplete="off" autocapitalize="words">
           <label for="parent_name"><i class="fas fa-users me-2"></i>Parent's Name (S/o or D/o)</label>
         </div>
 
         <div class="form-floating">
-          <input type="text" class="form-control" id="roll_no" name="roll_no" placeholder="21XXXXXX" required>
+          <input type="text" class="form-control" id="roll_no" name="roll_no" placeholder="21XXXXXX" required autocomplete="off" autocorrect="off" spellcheck="false" inputmode="text">
           <label for="roll_no"><i class="fas fa-id-card me-2"></i>Roll No ENTER FULL ROLL NO 21BDXXX</label>
         </div>
 
         <div class="form-floating">
-          <input type="text" class="form-control" id="admin_no" name="admin_no" placeholder="Admin No" required>
+          <input type="text" class="form-control" id="admin_no" name="admin_no" placeholder="Admin No" required autocomplete="off" autocorrect="off" spellcheck="false" inputmode="text">
           <label for="admin_no"><i class="fas fa-hashtag me-2"></i>Admin No - please check on ID CARD </label>
         </div>
 
         <div class="form-floating">
-          <input type="text" class="form-control" id="branch" name="branch" placeholder="Branch & Section" required>
+          <input type="text" class="form-control" id="branch" name="branch" placeholder="Branch & Section" required autocomplete="off" autocapitalize="characters">
           <label for="branch"><i class="fas fa-code-branch me-2"></i>Branch & Section</label>
         </div>
 
         <div class="form-floating">
-          <input type="tel" class="form-control" id="mobile" name="mobile" placeholder="9876543210" pattern="[0-9]{10}" required>
+          <input type="tel" class="form-control" id="mobile" name="mobile" placeholder="9876543210" pattern="[0-9]{10}" required inputmode="numeric" autocomplete="tel" maxlength="10">
           <label for="mobile"><i class="fas fa-phone me-2"></i>Mobile No</label>
         </div>
 
         <div class="form-floating">
-          <input type="text" class="form-control" id="class_obtained" name="class_obtained" placeholder="First Class / Second Class / First Class with Distinction" required>
+          <input type="text" class="form-control" id="class_obtained" name="class_obtained" placeholder="First Class / Second Class / First Class with Distinction" required autocomplete="off" inputmode="text" autocapitalize="sentences">
           <label for="class_obtained"><i class="fas fa-award me-2"></i>Class Obtained (Like: First Class etc) please mention fully</label>
         </div>
 
@@ -370,7 +380,7 @@
   </button>
 
   <div class="copyright">
-    © Monish
+    &copy; Monish
   </div>
 
   <div class="loading" id="loading">
@@ -383,10 +393,21 @@
 
   <script>
   function generatePDF() {
+    const form = document.getElementById("tcForm");
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    const loading = document.getElementById('loading');
+    const success = document.getElementById('successMessage');
+    const actionableBtns = document.querySelectorAll('.generate-btn, .floating-btn');
+    actionableBtns.forEach(b => b.disabled = true);
+    loading.style.display = 'flex';
+
+    try {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ unit: "mm", format: "a4" });
-
-    const form = document.getElementById("tcForm");
     const data = Object.fromEntries(new FormData(form).entries());
 
     // Format date as dd/mm/yyyy
@@ -435,9 +456,16 @@
 
     // Save PDF
     doc.save("Transfer_Certificate.pdf");
+    success.classList.add('show');
+    setTimeout(() => success.classList.remove('show'), 2500);
+  } catch (e) {
+    console.error('PDF generation failed:', e);
+    alert('Failed to generate PDF. Please try again.');
+  } finally {
+    loading.style.display = 'none';
+    actionableBtns.forEach(b => b.disabled = false);
   }
+}
 </script>
 </body>
 </html>
-
-
