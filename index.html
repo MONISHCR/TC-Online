@@ -128,6 +128,9 @@
       color: rgba(0, 0, 0, 0.6);
       font-weight: 500;
       padding: 1rem 1.25rem;
+      white-space: normal; /* allow wrapping for long labels on mobile */
+      line-height: 1.2;
+      width: calc(100% - 2.5rem); /* prevent clipping due to padding */
     }
 
     .form-floating > .form-control:focus ~ label,
@@ -289,6 +292,24 @@
         bottom: calc(6rem + env(safe-area-inset-bottom));
         right: 1rem;
         font-size: 0.8rem;
+      }
+    }
+
+    /* Make floating labels behave like top labels on very small screens */
+    @media (max-width: 480px) {
+      .form-floating > label {
+        position: static;
+        transform: none !important;
+        padding: 0 0 0.35rem 0;
+        width: 100%;
+        opacity: 1 !important;
+      }
+      .form-floating > .form-control,
+      .form-floating > .form-select {
+        padding: 0.9rem 1rem !important;
+      }
+      .form-floating > .form-control::placeholder {
+        color: transparent; /* don't show placeholder text */
       }
     }
 
