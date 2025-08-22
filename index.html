@@ -11,6 +11,10 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#667eea">
+  <!-- Favicon for desktop/mobile -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%23667eea'/><text x='50%' y='58%' dominant-baseline='middle' text-anchor='middle' font-size='38'>🎓</text></svg>">
+  <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsSAAALEgHS3X78AAAAB3RJTUUH5AgWEiw2E2n5qAAAABl0RVh0Q29tbWVudABDcmVhdGVkIHdpdGggZ2RuLXBuZy5nYXSZxwAAAB1JREFUWMPtzrENgDAQQ1F0/5fQmQjTqg3wQmQ2m2gM2A9qL2GvQZr1l0Kqf8i7kAN1p9v2AAAAABJRU5ErkJggg==">
+  <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAABc5m0jAAAACXBIWXMAAAsSAAALEgHS3X78AAAAB3RJTUUH5AgWEi0r3oQqKwAAABl0RVh0Q29tbWVudABDcmVhdGVkIHdpdGggZ2RuLXBuZy5nYXSZxwAAABpJREFUeNrtwQEBAAAAgiD/r25IQAEAAAAAAAAAAG4G1JwAAaLx3oUAAAAASUVORK5CYII=">
   <style>
     :root {
       --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -316,6 +320,9 @@
 
     /* Make floating labels behave like top labels on very small screens */
     @media (max-width: 576px) {
+      .container {
+        padding-top: calc(1rem + env(safe-area-inset-top));
+      }
       .form-floating > label {
         position: static;
         transform: none !important;
@@ -351,11 +358,17 @@
         border: 1px solid rgba(0,0,0,0.06) !important;
         border-radius: 14px;
         box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-        padding: 1rem !important;
+        padding: 1.25rem !important;
       }
       .header h1 {
         margin-bottom: 0.25rem;
+        background: none !important;
+        -webkit-text-fill-color: initial !important;
+        text-shadow: none !important;
+        color: #1f2937 !important; /* solid dark for contrast on white card */
+        font-weight: 700;
       }
+      .header p { color: #4b5563 !important; }
       .form-floating { margin-bottom: 1rem; }
       /* Keep copyright from overlapping the FAB */
       .copyright { display: none; }
