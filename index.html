@@ -345,8 +345,17 @@
         </div>
 
         <div class="form-floating">
+          <select class="form-select" id="relation" name="relation" required>
+            <option disabled selected value="">Choose...</option>
+            <option value="S/o">S/o</option>
+            <option value="D/o">D/o</option>
+          </select>
+          <label for="relation"><i class="fas fa-people-arrows me-2"></i>Relation (S/o or D/o)</label>
+        </div>
+
+        <div class="form-floating">
           <input type="text" class="form-control" id="parent_name" name="parent_name" placeholder="Parent's Name" required autocomplete="off" autocapitalize="words">
-          <label for="parent_name"><i class="fas fa-users me-2"></i>Parent's Name (S/o or D/o)</label>
+          <label for="parent_name"><i class="fas fa-users me-2"></i>Parent's Name</label>
         </div>
 
         <div class="form-floating">
@@ -413,7 +422,20 @@
   </div>
 
   <script>
-  function generatePDF() {
+  async function ensureJsPDF() {
+    if (window.jspdf && window.jspdf.jsPDF) return;
+    // Try alternate CDN
+    await new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js';
+      s.async = true;
+      s.onload = resolve;
+      s.onerror = () => reject(new Error('Failed to load jsPDF fallback CDN'));
+      document.head.appendChild(s);
+    });
+  }
+
+  async function generatePDF() {
     const form = document.getElementById("tcForm");
     if (!form.checkValidity()) {
       form.reportValidity();
@@ -427,6 +449,11 @@
     loading.style.display = 'flex';
 
     try {
+    // Ensure jsPDF is available (with fallback)
+    await ensureJsPDF();
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+      throw new Error('jsPDF library failed to load. Please check your internet connection.');
+    }
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ unit: "mm", format: "a4" });
     const data = Object.fromEntries(new FormData(form).entries());
@@ -435,7 +462,8 @@
     const dateObj = new Date(data.date);
     const formattedDate = `${String(dateObj.getDate()).padStart(2,'0')}/${String(dateObj.getMonth()+1).padStart(2,'0')}/${dateObj.getFullYear()}`;
 
-    doc.setFont("Times", "normal");
+    // Use a built-in standard font name in lower-case per jsPDF docs
+    doc.setFont("times", "normal");
     doc.setFontSize(12);
 
     // Date & Place aligned top right
@@ -453,7 +481,7 @@
     doc.text("Sub: Requesting for Transfer Certificate and Bonafide – reg.", 10, y); y+=15;
     doc.text("Sir/Madam,", 10, y); y+=10;
 
-    let body = `I ${data.student_name} S/o or D/o ${data.parent_name} with bearing Roll No. ${data.roll_no} and Admin. No. ${data.admin_no} studied in your college during period of ${data.college_period}, completed my four year B.Tech course successfully with ${data.class_obtained} and received all my original certificates which I have submitted at the time of admission.`;
+    let body = `I ${data.student_name} ${data.relation} ${data.parent_name} with bearing Roll No. ${data.roll_no} and Admin. No. ${data.admin_no} studied in your college during period of ${data.college_period}, completed my four year B.Tech course successfully with ${data.class_obtained} and received all my original certificates which I have submitted at the time of admission.`;
     doc.text(body, 10, y, { maxWidth: 180, align: "justify" }); 
     y += 30;
 
