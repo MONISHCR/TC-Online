@@ -31,7 +31,7 @@
     body {
       font-family: 'Inter', sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-      min-height: 100vh;
+      min-height: 100dvh; /* better on mobile browsers with dynamic toolbars */
       position: relative;
       overflow-x: hidden;
     }
@@ -51,9 +51,10 @@
     .container {
       position: relative;
       z-index: 2;
+      width: 100%;
       max-width: 700px;
       margin: 0 auto;
-      padding: 2rem 1rem 6rem; /* bottom space for floating action button on mobile */
+      padding: 2rem clamp(0.75rem, 4vw, 1.25rem) 6rem; /* bottom space for floating action button on mobile */
     }
 
     .main-card {
@@ -66,6 +67,7 @@
       padding: 2.5rem;
       margin-bottom: 2rem;
       animation: slideUp 0.8s ease-out;
+      width: 100%;
     }
 
     @keyframes slideUp {
@@ -115,6 +117,7 @@
       font-size: 1rem;
       transition: all 0.3s ease;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      width: 100%;
     }
 
     .form-control:focus, .form-select:focus {
@@ -274,13 +277,13 @@
 
     @media (max-width: 768px) {
       .main-card {
-        padding: 1.5rem;
-        margin: 1rem;
+        padding: clamp(1rem, 3.5vw, 1.5rem);
+        margin: 1rem auto;
         border-radius: 20px;
       }
       
       .header h1 {
-        font-size: 2rem;
+        font-size: clamp(1.5rem, 6vw, 2rem);
       }
       
       .form-control, .form-select {
@@ -295,22 +298,67 @@
       }
     }
 
+    /* Very small screens */
+    @media (max-width: 360px) {
+      .form-control, .form-select {
+        font-size: 0.95rem;
+        padding: 0.75rem 0.9rem;
+      }
+      .generate-btn {
+        padding: 0.9rem 1.25rem;
+        font-size: 1rem;
+      }
+      .floating-btn {
+        padding: 1rem;
+        font-size: 1rem;
+      }
+    }
+
     /* Make floating labels behave like top labels on very small screens */
-    @media (max-width: 480px) {
+    @media (max-width: 576px) {
       .form-floating > label {
         position: static;
         transform: none !important;
-        padding: 0 0 0.35rem 0;
+        padding: 0 0 0.4rem 0;
         width: 100%;
         opacity: 1 !important;
+        color: rgba(0,0,0,0.85) !important;
+        font-weight: 600;
+        font-size: 0.95rem;
+      }
+      /* Put label above the control for mobile by reversing the DOM order visually */
+      .form-floating {
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 0.25rem;
       }
       .form-floating > .form-control,
       .form-floating > .form-select {
         padding: 0.9rem 1rem !important;
+        background: #fff !important;
+        border: 1px solid #ced4da !important; /* cleaner bootstrap-like */
+        box-shadow: none !important;
+        border-radius: 12px !important;
+        min-height: 3rem;
       }
       .form-floating > .form-control::placeholder {
         color: transparent; /* don't show placeholder text */
       }
+      .main-card {
+        background: #ffffff !important;
+        -webkit-backdrop-filter: none !important;
+        backdrop-filter: none !important;
+        border: 1px solid rgba(0,0,0,0.06) !important;
+        border-radius: 14px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        padding: 1rem !important;
+      }
+      .header h1 {
+        margin-bottom: 0.25rem;
+      }
+      .form-floating { margin-bottom: 1rem; }
+      /* Keep copyright from overlapping the FAB */
+      .copyright { display: none; }
     }
 
     @media (min-width: 769px) {
