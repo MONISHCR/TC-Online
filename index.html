@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>'>
-  <title>Transfer Certificate Generator</title>
+  <title>Caution Deposit Request Letter Generator</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -279,6 +279,39 @@
       transform: translateX(0);
     }
 
+    /* Help Sidebar */
+    .help-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 1200;
+      display: none;
+    }
+    .help-sidebar {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: min(380px, 90vw);
+      background: #ffffff;
+      box-shadow: -10px 0 30px rgba(0,0,0,0.2);
+      z-index: 1201;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .help-sidebar.show { transform: translateX(0); }
+    .help-sidebar .head {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .help-sidebar .body { padding: 1rem 1.25rem 1.5rem; overflow-y: auto; }
+    .help-sidebar a { word-break: break-all; }
+
     @media (max-width: 768px) {
       .main-card {
         padding: clamp(1rem, 3.5vw, 1.5rem);
@@ -385,14 +418,110 @@
   <div class="container">
     <div class="main-card">
       <div class="header">
-        <h1><i class="fas fa-graduation-cap"></i> Transfer Certificate Generator</h1>
-        <p>Generate your official transfer certificate instantly</p>
+        <h1 id="headerTitle"><i class="fas fa-graduation-cap"></i> Caution Deposit Request Letter</h1>
+        <p id="headerSubtitle">Generate your caution deposit refund request letter instantly</p>
+      </div>
+      
+      <div class="mb-4 d-grid" role="tablist" aria-label="Choose Application">
+        <div class="btn-group" style="border-radius:14px; overflow:hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.08);">
+          <button id="tab-cd" type="button" class="btn btn-light fw-semibold" aria-selected="true" onclick="switchMode('cd')">
+            <i class="fa-solid fa-piggy-bank me-2"></i>Caution Deposit
+          </button>
+          <button id="tab-tc" type="button" class="btn btn-outline-light fw-semibold" aria-selected="false" onclick="switchMode('tc')">
+            <i class="fa-solid fa-file-signature me-2"></i>Transfer Certificate
+          </button>
+        </div>
       </div>
 
-      <form id="tcForm" novalidate>
+      <form id="cdForm" novalidate>
         <div class="form-floating">
           <input type="date" class="form-control" id="date" name="date" placeholder="Date" required autocomplete="off" inputmode="numeric">
           <label for="date"><i class="fas fa-calendar-alt me-2"></i>Date</label>
+        </div>
+
+        <div class="form-floating">
+          <input type="text" class="form-control" id="student_name" name="student_name" placeholder="Student Name" required autocomplete="name" autocapitalize="words">
+          <label for="student_name"><i class="fas fa-user me-2"></i>Student Name</label>
+        </div>
+
+        <div class="form-floating">
+          <select class="form-select" id="relation" name="relation" required>
+            <option disabled selected value="">Choose...</option>
+            <option value="S/o">S/o</option>
+            <option value="D/o">D/o</option>
+          </select>
+          <label for="relation"><i class="fas fa-people-arrows me-2"></i>Relation (S/o or D/o)</label>
+        </div>
+
+        <div class="form-floating">
+          <input type="text" class="form-control" id="parent_name" name="parent_name" placeholder="Parent's Name" required autocomplete="off" autocapitalize="words">
+          <label for="parent_name"><i class="fas fa-users me-2"></i>Parent's Name</label>
+        </div>
+
+        <div class="form-floating">
+          <input type="text" class="form-control" id="roll_no" name="roll_no" placeholder="16BDIAXXXX" required autocomplete="off" autocorrect="off" spellcheck="false" inputmode="text">
+          <label for="roll_no"><i class="fas fa-id-card me-2"></i>Roll No ENTER FULL ROLL NO 21BDXXX</label>
+        </div>
+
+        <div class="form-floating">
+          <input type="text" class="form-control" id="admin_no" name="admin_no" placeholder="Admin No" required autocomplete="off" autocorrect="off" spellcheck="false" inputmode="text">
+          <label for="admin_no"><i class="fas fa-hashtag me-2"></i>Admin No - please check on ID CARD </label>
+        </div>
+
+        <div class="form-floating">
+          <input type="text" class="form-control" id="college_period" name="college_period" placeholder="2020-2024" required autocomplete="off" inputmode="text">
+          <label for="college_period"><i class="fas fa-clock me-2"></i>College Period (EG:2021-2025) </label>
+        </div>
+
+        <div class="form-floating">
+          <input type="text" class="form-control" id="class_obtained" name="class_obtained" placeholder="First Class / Second Class" required autocomplete="off" inputmode="text" autocapitalize="sentences">
+          <label for="class_obtained"><i class="fas fa-award me-2"></i>Class Obtained</label>
+        </div>
+
+        <div class="form-floating">
+          <input type="text" class="form-control" id="admission_year" name="admission_year" placeholder="2020" required autocomplete="off" inputmode="numeric" maxlength="4">
+          <label for="admission_year"><i class="fas fa-calendar me-2"></i>Year of Admission (e.g., 2021)</label>
+        </div>
+
+        <div class="form-floating">
+          <input type="text" class="form-control" id="branch" name="branch" placeholder="Branch & Section" required autocomplete="off" autocapitalize="characters">
+          <label for="branch"><i class="fas fa-code-branch me-2"></i>Branch & Section</label>
+        </div>
+
+        <div class="form-floating">
+          <input type="tel" class="form-control" id="mobile" name="mobile" placeholder="9876543210" pattern="[0-9]{10}" required inputmode="numeric" autocomplete="tel" maxlength="10">
+          <label for="mobile"><i class="fas fa-phone me-2"></i>Mobile No</label>
+        </div>
+
+        <div class="form-floating">
+          <input type="text" class="form-control" id="receipt_no" name="receipt_no" placeholder="Receipt No" autocomplete="off" inputmode="text">
+          <label for="receipt_no"><i class="fas fa-receipt me-2"></i>Receipt No</label>
+        </div>
+        <div class="mb-3" style="margin-top:-0.25rem">
+          <button type="button" class="btn btn-link p-0" onclick="openHelpSidebar()">
+            <i class="fa-regular fa-circle-question me-1"></i>Need help finding Receipt No? (opens guide)
+          </button>
+        </div>
+
+        <div class="form-floating">
+          <input type="text" class="form-control" id="tc_no" name="tc_no" placeholder="TC No" autocomplete="off" inputmode="text">
+          <label for="tc_no"><i class="fas fa-file-alt me-2"></i>TC No.</label>
+        </div>
+
+        <div class="form-floating">
+          <input type="file" class="form-control" id="cd_no_due" name="no_due" accept="image/*,.pdf">
+          <label for="cd_no_due"><i class="fas fa-file-upload me-2"></i>No Dues Certificate (image or PDF) - Optional</label>
+        </div>
+
+        <button type="button" class="btn generate-btn w-100 d-none d-md-block" onclick="generateCDPDF()">
+          <i class="fas fa-file-pdf me-2"></i>Generate PDF Letter
+        </button>
+      </form>
+
+      <form id="tcForm" class="mt-4" style="display:none" novalidate>
+        <div class="form-floating">
+          <input type="date" class="form-control" id="tc_date" name="date" placeholder="Date" required autocomplete="off" inputmode="numeric">
+          <label for="tc_date"><i class="fas fa-calendar-alt me-2"></i>Date</label>
         </div>
 
         <div class="form-floating">
@@ -459,15 +588,20 @@
           <label for="category"><i class="fas fa-tags me-2"></i>Category</label>
         </div>
 
-        <button type="button" class="btn generate-btn w-100 d-none d-md-block" onclick="generatePDF()">
+        <div class="form-floating">
+          <input type="file" class="form-control" id="tc_no_due" name="no_due" accept="image/*,.pdf">
+          <label for="tc_no_due"><i class="fas fa-file-upload me-2"></i>No Dues Certificate (image or PDF) - Optional</label>
+        </div>
+
+        <button type="button" class="btn generate-btn w-100 d-none d-md-block" onclick="generateTCPDF()">
           <i class="fas fa-file-pdf me-2"></i>Generate PDF Certificate
         </button>
       </form>
     </div>
   </div>
 
-  <button type="button" class="btn floating-btn d-md-none" onclick="generatePDF()">
-    <i class="fas fa-file-pdf me-2"></i>Generate PDF
+  <button type="button" class="btn floating-btn d-md-none" onclick="generateActivePDF()">
+    <i class="fas fa-file-pdf me-2"></i>Generate Letter
   </button>
 
   <div class="copyright">
@@ -479,8 +613,34 @@
   </div>
 
   <div class="success-message" id="successMessage">
-    <i class="fas fa-check-circle me-2"></i>PDF Generated Successfully!
+    <i class="fas fa-check-circle me-2"></i>Letter Generated Successfully!
   </div>
+
+  <!-- Help Sidebar / Overlay -->
+  <div id="helpOverlay" class="help-overlay" onclick="closeHelpSidebar()"></div>
+  <aside id="helpSidebar" class="help-sidebar" aria-labelledby="helpTitle" aria-hidden="true">
+    <div class="head">
+      <h5 id="helpTitle" class="m-0"><i class="fa-solid fa-receipt me-2"></i>Find your Receipt Number</h5>
+      <button type="button" class="btn btn-sm btn-outline-secondary" onclick="closeHelpSidebar()">Close</button>
+    </div>
+    <div class="body">
+      <p class="text-muted mb-2">Use the portal below to view your fee receipts, then copy the receipt no. into the form.</p>
+      <p class="mb-2">
+        Portal Link: 
+        <a href="https://ssolive.myclassboard.com/Account/Login?ReturnUrl=%2Fconnect%2Fauthorize%2Fcallback%3Fclient_id%3DDIL4KLQ05IV1JZOXCLM0%26redirect_uri%3Dhttps%253A%252F%252Ficici.myclassboard.com%252Fsso%252FCallback%26response_type%3Dcode%26scope%3Dopenid%2520profile%2520offline_access" target="_blank" rel="noopener">Open MyClassBoard (login)</a>
+      </p>
+      <ol class="mb-3">
+        <li>Login with your credentials.</li>
+        <li>Navigate to <b>Pay/View Fees</b>.</li>
+        <li>Select <b>View All Transactions</b>.</li>
+        <li>Locate your <b>1-1 semester</b> transaction and copy the <b>Receipt Number</b>.</li>
+        <li>Paste it into the <b>Receipt No</b> field in the Caution Deposit form.</li>
+      </ol>
+      <div class="alert alert-info" role="alert">
+        Tip: Download the receipt PDF from the portal and attach it as <b>No Dues</b> if your college requires it.
+      </div>
+    </div>
+  </aside>
 
   <script>
   async function ensureJsPDF() {
@@ -496,8 +656,85 @@
     });
   }
 
-  async function generatePDF() {
-    const form = document.getElementById("tcForm");
+  async function ensurePdfLib() {
+    if (window.PDFLib && window.PDFLib.PDFDocument) return;
+    await new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js';
+      s.async = true;
+      s.onload = resolve;
+      s.onerror = () => reject(new Error('Failed to load pdf-lib'));
+      document.head.appendChild(s);
+    });
+  }
+
+  function isPdfFile(file) {
+    return file && (file.type === 'application/pdf' || /\.pdf$/i.test(file.name));
+  }
+
+  function downloadBytesAsFile(bytes, filename) {
+    const blob = new Blob([bytes], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  // Help Sidebar controls
+  function openHelpSidebar() {
+    document.getElementById('helpOverlay').style.display = 'block';
+    document.getElementById('helpSidebar').classList.add('show');
+    document.getElementById('helpSidebar').setAttribute('aria-hidden','false');
+  }
+  function closeHelpSidebar() {
+    document.getElementById('helpOverlay').style.display = 'none';
+    document.getElementById('helpSidebar').classList.remove('show');
+    document.getElementById('helpSidebar').setAttribute('aria-hidden','true');
+  }
+
+  let currentMode = 'cd';
+
+  function switchMode(mode) {
+    currentMode = mode;
+    const cdForm = document.getElementById('cdForm');
+    const tcForm = document.getElementById('tcForm');
+    const title = document.getElementById('headerTitle');
+    const subtitle = document.getElementById('headerSubtitle');
+    const tabCd = document.getElementById('tab-cd');
+    const tabTc = document.getElementById('tab-tc');
+
+    if (mode === 'cd') {
+      cdForm.style.display = '';
+      tcForm.style.display = 'none';
+      title.innerHTML = '<i class="fas fa-graduation-cap"></i> Caution Deposit Request Letter';
+      subtitle.textContent = 'Generate your caution deposit refund request letter instantly';
+      tabCd.classList.remove('btn-outline-light');
+      tabCd.classList.add('btn-light');
+      tabTc.classList.remove('btn-light');
+      tabTc.classList.add('btn-outline-light');
+    } else {
+      cdForm.style.display = 'none';
+      tcForm.style.display = '';
+      title.innerHTML = '<i class="fas fa-graduation-cap"></i> Transfer Certificate Request Letter';
+      subtitle.textContent = 'Generate your transfer certificate request letter instantly';
+      tabTc.classList.remove('btn-outline-light');
+      tabTc.classList.add('btn-light');
+      tabCd.classList.remove('btn-light');
+      tabCd.classList.add('btn-outline-light');
+    }
+  }
+
+  function generateActivePDF() {
+    if (currentMode === 'cd') return generateCDPDF();
+    return generateTCPDF();
+  }
+
+  async function generateCDPDF() {
+    const form = document.getElementById("cdForm");
     if (!form.checkValidity()) {
       form.reportValidity();
       return;
@@ -536,6 +773,128 @@
     doc.text("To,", 10, y); y+=6;
     doc.text("The Principal,", 10, y); y+=6;
     doc.text("KMIT,", 10, y); y+=6;
+    doc.text("Narayanguda, Hyderabad-500029,", 10, y); y+=10;
+
+    doc.text("Sub:-Requesting for Caution Deposit-reg", 10, y); y+=15;
+    doc.text("Sir/Madam,", 10, y); y+=10;
+
+    let body = `I ${data.student_name} ${data.relation} ${data.parent_name} with bearing Roll No. ${data.roll_no} and Admin. No. ${data.admin_no} studied in your college during period of ${data.college_period}, completed my four year B.Tech course successfully with ${data.class_obtained} and received all my original certificates & TC(TC NO: ${data.tc_no}) from Admin Department.`;
+    doc.text(body, 10, y, { maxWidth: 180, align: "justify" });
+    y += 30;
+
+    let req = `Now I request you to refund my "Caution Deposit" amount which I have deposited at the time of my admission into 1st year (${data.admission_year}) as per college procedure.`;
+    doc.text(req, 10, y, { maxWidth: 180, align: "justify" });
+    y += 30;
+
+    doc.text("Thanking you,", 10, y); y+=8;
+    doc.text("Yours faithfully,", 10, y); y+=25;
+
+    // Leave space for signature
+    doc.text("Student Signature", 10, y); y+=10;
+
+    // Student details below signature
+    doc.text(`STUDENT NAME: ${data.student_name}`, 10, y); y+=6;
+    doc.text(`ROLL No.: ${data.roll_no}`, 10, y); y+=6;
+    doc.text(`ADMIN. No.: ${data.admin_no}`, 10, y); y+=6;
+    doc.text(`BRANCH & SECTION: ${data.branch}`, 10, y); y+=6;
+    doc.text(`MOBILE. No.: ${data.mobile}`, 10, y); y+=6;
+    if (data.receipt_no) {
+      doc.text(`Receipt No: ${data.receipt_no}`, 10, y); y+=6;
+    }
+    if (data.tc_no) {
+      doc.text(`TC No: ${data.tc_no}`, 10, y); y+=6;
+    }
+
+    // Append optional No Dues file if provided
+    const fileInput = document.getElementById('cd_no_due');
+    const file = fileInput && fileInput.files && fileInput.files[0];
+
+    if (!file) {
+      doc.save("Caution_Deposit_Request.pdf");
+    } else if (isPdfFile(file)) {
+      await ensurePdfLib();
+      const letterBytes = doc.output('arraybuffer');
+      const baseDoc = await PDFLib.PDFDocument.load(letterBytes);
+      const donorBytes = await file.arrayBuffer();
+      const donorDoc = await PDFLib.PDFDocument.load(donorBytes);
+      const donorPages = await baseDoc.copyPages(donorDoc, donorDoc.getPageIndices());
+      donorPages.forEach(p => baseDoc.addPage(p));
+      const merged = await baseDoc.save();
+      downloadBytesAsFile(merged, 'Caution_Deposit_Request.pdf');
+    } else {
+      // Treat as image: append on a new page
+      const imgDataUrl = await new Promise((res, rej) => {
+        const r = new FileReader();
+        r.onload = () => res(r.result);
+        r.onerror = rej;
+        r.readAsDataURL(file);
+      });
+      doc.addPage();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      // Try to get image dimensions by creating an Image object
+      const dims = await new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve({ w: img.width, h: img.height });
+        img.src = imgDataUrl;
+      });
+      const maxW = pageWidth - 20;
+      const scale = Math.min(maxW / dims.w, pageHeight / dims.h);
+      const drawW = dims.w * scale;
+      const drawH = dims.h * scale;
+      const x = (pageWidth - drawW) / 2;
+      const y = (pageHeight - drawH) / 2;
+      const format = file.type.includes('png') ? 'PNG' : 'JPEG';
+      doc.addImage(imgDataUrl, format, x, y, drawW, drawH);
+      doc.save("Caution_Deposit_Request.pdf");
+    }
+    success.classList.add('show');
+    setTimeout(() => success.classList.remove('show'), 2500);
+  } catch (e) {
+    console.error('PDF generation failed:', e);
+    alert('Failed to generate PDF. Please try again.');
+  } finally {
+    loading.style.display = 'none';
+    actionableBtns.forEach(b => b.disabled = false);
+  }
+}
+
+// TC generator
+async function generateTCPDF() {
+  const form = document.getElementById("tcForm");
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return;
+  }
+
+  const loading = document.getElementById('loading');
+  const success = document.getElementById('successMessage');
+  const actionableBtns = document.querySelectorAll('.generate-btn, .floating-btn');
+  actionableBtns.forEach(b => b.disabled = true);
+  loading.style.display = 'flex';
+
+  try {
+    await ensureJsPDF();
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+      throw new Error('jsPDF library failed to load. Please check your internet connection.');
+    }
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: "mm", format: "a4" });
+    const data = Object.fromEntries(new FormData(form).entries());
+
+    const dateObj = new Date(data.date);
+    const formattedDate = `${String(dateObj.getDate()).padStart(2,'0')}/${String(dateObj.getMonth()+1).padStart(2,'0')}/${dateObj.getFullYear()}`;
+
+    doc.setFont("times", "normal");
+    doc.setFontSize(12);
+
+    doc.text(`Date: ${formattedDate}`, 150, 20);
+    doc.text("Hyderabad.", 150, 28);
+
+    let y = 45;
+    doc.text("To,", 10, y); y+=6;
+    doc.text("The Principal,", 10, y); y+=6;
+    doc.text("KMIT,", 10, y); y+=6;
     doc.text("Narayanguda,", 10, y); y+=6;
     doc.text("Hyd 500029.", 10, y); y+=10;
 
@@ -553,10 +912,8 @@
     doc.text("Thanking you,", 10, y); y+=8;
     doc.text("Yours faithfully,", 10, y); y+=25;
 
-    // Leave space for signature
     doc.text("Student Signature", 10, y); y+=10;
 
-    // Student details below signature
     doc.text(`STUDENT NAME: ${data.student_name}`, 10, y); y+=6;
     doc.text(`ROLL No.: ${data.roll_no}`, 10, y); y+=6;
     doc.text(`ADMIN. No.: ${data.admin_no}`, 10, y); y+=6;
@@ -564,8 +921,48 @@
     doc.text(`MOBILE. No.: ${data.mobile}`, 10, y); y+=6;
     doc.text(`CATEGORY: ${data.category}`, 10, y);
 
-    // Save PDF
-    doc.save("Transfer_Certificate.pdf");
+    // Append optional No Dues file if provided
+    const fileInput = document.getElementById('tc_no_due');
+    const file = fileInput && fileInput.files && fileInput.files[0];
+
+    if (!file) {
+      doc.save("Transfer_Certificate.pdf");
+    } else if (isPdfFile(file)) {
+      await ensurePdfLib();
+      const letterBytes = doc.output('arraybuffer');
+      const baseDoc = await PDFLib.PDFDocument.load(letterBytes);
+      const donorBytes = await file.arrayBuffer();
+      const donorDoc = await PDFLib.PDFDocument.load(donorBytes);
+      const donorPages = await baseDoc.copyPages(donorDoc, donorDoc.getPageIndices());
+      donorPages.forEach(p => baseDoc.addPage(p));
+      const merged = await baseDoc.save();
+      downloadBytesAsFile(merged, 'Transfer_Certificate.pdf');
+    } else {
+      // Treat as image: append on a new page
+      const imgDataUrl = await new Promise((res, rej) => {
+        const r = new FileReader();
+        r.onload = () => res(r.result);
+        r.onerror = rej;
+        r.readAsDataURL(file);
+      });
+      doc.addPage();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const dims = await new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve({ w: img.width, h: img.height });
+        img.src = imgDataUrl;
+      });
+      const maxW = pageWidth - 20;
+      const scale = Math.min(maxW / dims.w, pageHeight / dims.h);
+      const drawW = dims.w * scale;
+      const drawH = dims.h * scale;
+      const x = (pageWidth - drawW) / 2;
+      const y = (pageHeight - drawH) / 2;
+      const format = file.type.includes('png') ? 'PNG' : 'JPEG';
+      doc.addImage(imgDataUrl, format, x, y, drawW, drawH);
+      doc.save("Transfer_Certificate.pdf");
+    }
     success.classList.add('show');
     setTimeout(() => success.classList.remove('show'), 2500);
   } catch (e) {
@@ -576,6 +973,9 @@
     actionableBtns.forEach(b => b.disabled = false);
   }
 }
-</script>
+
+// Default to CD tab on load
+document.addEventListener('DOMContentLoaded', () => switchMode('cd'));
+  </script>
 </body>
 </html>
